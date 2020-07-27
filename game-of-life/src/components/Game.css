@@ -1,0 +1,23 @@
+.board {
+    position: relative;
+    margin: 0 auto;
+    background-color: #000000;
+    background-image:
+        /* This creates the grid lines */
+        linear-gradient(#333333 1px, transparent 1px),
+        linear-gradient(90deg, #333333 1px, transparent 1px);
+}
+
+.cell {
+    background: #cccccc;
+    position: absolute;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+.button {
+    margin-left: 12px;
+    cursor: pointer;
+}
