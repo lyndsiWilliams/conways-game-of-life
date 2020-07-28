@@ -1,6 +1,4 @@
 .board {
-    position: relative;
-    margin: 0 auto;
     background-color: #000000;
     /* This creates the grid lines */
     background-image:
