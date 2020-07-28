@@ -2,9 +2,11 @@
     position: relative;
     margin: 0 auto;
     background-color: #000000;
+    /* This creates the grid lines */
     background-image:
-        /* This creates the grid lines */
+        /* Horizontal */
         linear-gradient(#333333 1px, transparent 1px),
+        /* Vertical */
         linear-gradient(90deg, #333333 1px, transparent 1px);
 }
 
