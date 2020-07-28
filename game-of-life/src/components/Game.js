@@ -1,7 +1,6 @@
 // React
 import React, { useState, useRef } from 'react';
 // Component
-// import Cell from './Cell';
 import Rules from './Rules';
 // Styling
 import './Game.css';
@@ -9,124 +8,6 @@ import './Game.css';
 
 // Size of one cell ((cellSize)px * (cellSize)px)
 const cellSize = 20;
-// Width and height of game board
-const width = 800;
-const height = 600;
-
-// ----- Transferring to functional components: To be continued... -----
-
-// const Game = () => {
-//     // Set up the row/column sizes and
-//     // Create a new empty board
-//     const rows = height / cellSize;
-//     const columns = width / cellSize;
-
-//     // Setting initial state
-//     const [cells, setCells] = useState([]);
-//     const [interval, setInterval] = useState(100);
-//     const [isRunning, setIsRunning] = useState(false);
-//     const [board, setBoard] = useState([]);
-
-//     // ----- Start helper functions -----
-
-//     // The cell murderer
-//     const makeEmptyBoard = () => {
-//         let eboard = [];
-
-//         // Outer loop goes through the rows
-//         for (let y = 0; y < rows; y++) {
-//             // Set each row to an empty array
-//             eboard[y] = [];
-            
-//             // Inner loop goes through the columns
-//             for (let x = 0; x < cols; x++) {
-//                 // This kills the cell
-//                 eboard[y][x] = false;
-//             }
-//         }
-
-//         return eboard;
-//     }
-
-//     // Calculate the position of the board element
-//     const getElementOffset = () => {
-//         // Returns the size of boardRef and its position relative to the viewport
-//         const rect = this.boardRef.getBoundingClientRect();
-//         // Returns the documentElement of the document as an element
-//         const doc = document.documentElement;
-
-//         return {
-//             // Left of the element + pixels away from left of window - width of left border
-//             x: (rect.left + window.pageXOffset) - doc.clientLeft,
-//             // Right of the element + pixels away from top of the window - width of top border
-//             y: (rect.top + window.pageYOffset) - doc.clientTop,
-//         };
-//     }
-
-//     // Create cells from this.board
-//     const makeCells = () => {
-//         // Create an empty array for the cell to live in
-//         let mcells = [];
-        
-//         // Outer loop goes through the rows
-//         for (let y = 0; y < rows; y++) {
-//             // Inner loop goes through the columns
-//             for (let x = 0; x < cols; x++) {
-//                 // If the board exists at that position...
-//                 if (board[y][x]) {
-//                     // Place the cell at that position
-//                     mcells.push({ x, y });
-//                 }
-//             }
-//         }
-        
-//         return mcells;
-//     }
-
-//     // Event handler
-//     const handleClick = event => {
-//         const elemOffset = getElementOffset();
-//         // x value of place clicked - board's x value
-//         const offsetX = event.clientX - elemOffset.x;
-//         // y value of place clicked - board's y value
-//         const offsetY = event.clientY - elemOffset.y;
-//         // Round down to remove the decimals from x and y 
-//         const x = Math.floor(offsetX / cellSize);
-//         const y = Math.floor(offsetY / cellSize);
-
-//         // If there isn't a cell at that position, place it
-//         // If there is already a cell at that position, remove it
-//         if (x >= 0 && x <= cols && y >= 0 && y <= rows) {
-//             // Toggle functionality
-//             board[y][x] = !board[y][x];
-//         }
-
-//         // Set the cell status to state
-//         setCells({ cells: makeCells() });
-//     }
-
-//     // Start the game!
-//     const runGame = () => {
-//         setIsRunning({ isRunning: true });
-//         // Begin iterating
-//         runIteration();
-//     }
-
-//     // Stop the game
-//     stopGame = () => {
-//         setIsRunning({ isRunning: false });
-
-//         // If there is an active timeoutHandler...
-//         if (this.timeoutHandler) {
-//             // Clear the time
-//             window.clearTimeout(this.timeoutHandler);
-//             this.timeoutHandler = null;
-//         }
-//     }
-// }
-
-
-
 
 
 // The Cell component
@@ -149,14 +30,15 @@ class Cell extends React.Component {
     }
 }
 
+
 // The Game component
 class Game extends React.Component {
     // Set up the row/column sizes and
     // Create a new empty board
     constructor() {
         super();
-        this.rows = height / cellSize;
-        this.cols = width / cellSize;
+        this.rows = this.state.height / cellSize;
+        this.cols = this.state.width / cellSize;
         this.board = this.makeEmptyBoard();
     }
 
@@ -165,6 +47,10 @@ class Game extends React.Component {
         cells: [],
         interval: 100,
         isRunning: false,
+        count: 0,
+        // Width and height of game board
+        width: 800,
+        height: 600,
     }
 
     // ---------- Helper functions ----------
@@ -300,6 +186,8 @@ class Game extends React.Component {
 
         // Set the old board to the newly-changed board
         this.board = newBoard;
+        // Increase the iteration count
+        this.state.count++;
         // Set the changed cells to state
         this.setState({ cells: this.makeCells() });
 
@@ -344,6 +232,7 @@ class Game extends React.Component {
     handleClear = () => {
         this.board = this.makeEmptyBoard();
         this.setState({ cells: this.makeCells() });
+        this.setState({ count: 0 })
     }
 
     handleRandom = () => {
@@ -356,6 +245,20 @@ class Game extends React.Component {
         this.setState({ cells: this.makeCells() });
     }
 
+    smallerGrid = () => {
+        this.setState({
+            width: this.state.width/2,
+            height: this.state.height/2
+        });
+    }
+
+    largerGrid = () => {
+        this.setState({
+            width: this.state.width*2,
+            height: this.state.height*2
+        });
+    }
+
 
     render() {
         // Bring in cell state
@@ -363,33 +266,36 @@ class Game extends React.Component {
 
         return (
             <div>
-                {/* The game board */}
-                <div
-                    className="board"
-                    style={{
-                        width: width,
-                        height: height,
-                        // Sets the cell size
-                        backgroundSize: `${cellSize}px ${cellSize}px`
-                    }}
-                    onClick={this.handleClick}
-                    // Refs make it possible to access DOM nodes directly within React
-                    // So you can manipulate a child of a component
-                    ref={(n) => { this.boardRef = n; }}>
+                <div className="wrapper">
+                    {/* The game board */}
+                    <div
+                        className="board"
+                        style={{
+                            width: this.state.width,
+                            height: this.state.height,
+                            // Sets the cell size
+                            backgroundSize: `${cellSize}px ${cellSize}px`
+                        }}
+                        onClick={this.handleClick}
+                        // Refs make it possible to access DOM nodes directly within React
+                        // So you can manipulate a child of a component
+                        ref={(n) => { this.boardRef = n; }}>
 
-                    {/* Map through current state's cells and create a cell for each */}
-                    {cells.map(cell => (
-                        <Cell x={cell.x} y={cell.y}
-                        key={`${cell.x},${cell.y}`}/>
-                        ))}
-                </div>
-
-                {/* Instructions and rules */}
-                <div>
-                    <Rules />
+                        {/* Map through current state's cells and create a cell for each */}
+                        {cells.map(cell => (
+                            <Cell x={cell.x} y={cell.y}
+                            key={`${cell.x},${cell.y}`}/>
+                            ))}
+                    </div>
+                            
+                    {/* Instructions and rules */}
+                    <div className="rules">
+                        <Rules />
+                    </div>
                 </div>
 
                 <div className="controls">
+                    This is generation {this.state.count}<br /><br />
                     {/* User input for interval */}
                     Update every <input value={this.state.interval} onChange={this.handleIntervalChange} /> msec
                     
@@ -406,6 +312,10 @@ class Game extends React.Component {
 
                     {/* Clear button */}
                     <button className="button" onClick={this.handleClear}>Clear</button>
+
+                    {/* Size buttons */}
+                    <button className="button" onClick={this.smallerGrid}>Smaller</button>
+                    <button className="button" onClick={this.largerGrid}>Larger</button>
                 </div>
             </div>
         );
