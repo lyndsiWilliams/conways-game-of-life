@@ -1,117 +1,14 @@
 // React
-import React, { useState, useRef } from 'react';
+import React from 'react';
 // Component
-// import Cell from './Cell';
+import Rules from './Rules';
 // Styling
 import './Game.css';
 
 
 // Size of one cell ((cellSize)px * (cellSize)px)
 const cellSize = 20;
-// Width and height of game board
-const width = 800;
-const height = 600;
 
-// const Game = () => {
-//     // Setting local state
-//     const [board, setBoard] = useState([]);
-//     const [cells, setCells] = useState([]);
-//     // Get reference to the board
-//     var boardRef = useRef();
-
-//     // Set some sizes
-//     const rows = height / cellSize;
-//     const columns = width / cellSize;
-//     // const board = makeEmptyBoard();
-
-//     // Make an empty board
-//     const makeEmptyBoard = () => {
-//         let board = [];
-
-//         for (let y = 0; y < rows; y++) {
-//             board[y] = [];
-
-//             for (let x = 0; x < columns; x++) {
-//                 board[y][x] = false;
-//             }
-//         }
-
-//         return board;
-//     }
-
-//     // Create a cell
-//     const makeCells = () => {
-//         for (let y = 0; y < rows; y++) {
-//             for (let x = 0; x < columns; x++) {
-//                 if (board[y][x]) {
-//                     cells.push({ x, y });
-//                 }
-//             }
-//         }
-
-//         return cells;
-//     }
-
-//     // Calculate the position of the board element
-//     const getElementOffset = () => {
-//         // Returns the size of boardRef and its position relative to the viewport
-//         const rect = boardRef.getBoundingClientRect();  // boardRef?
-//         // Returns the documentElement of the document as an element
-//         const doc = document.documentElement;
-
-//         return {
-//             // Left of the element + pixels away from left of window - width of left border
-//             x: (rect.left + window.pageXOffset) - doc.clientLeft,
-//             // Right of the element + pixels away from top of the window - width of top border
-//             y: (rect.top + window.pageYOffset) - doc.clientTop
-//         }
-//     }
-
-//     // Event handler
-//     const handleClick = (event) => {
-//         const elemOffset = getElementOffset();
-//         // x value of place clicked - board's x value
-//         const offsetX = event.clientX - elemOffset.x;
-//         // y value of place clicked - board's y value
-//         const offsetY = event.clientY - elemOffset.y;
-//         const x = Math.floor(offsetX / cellSize);
-//         const y = Math.floor(offsetY / cellSize);
-
-//         if (x >= 0 && x <= columns && y >= 0 && y <= rows) {
-//             board[y][x] = !board[y][x]
-//         }
-
-//         // Make the cell at the clicked location
-//         setCells({ cells: makeCells() });
-//     }
-
-//     return (
-//         <div>
-//             {/* The game board */}
-//             <div
-//                 className="board"
-//                 style={{
-//                     width: width,
-//                     height: height,
-//                     // Setting the cell size
-//                     backgroundSize: `${cellSize}px ${cellSize}px`
-//                 }}
-//                 onClick={handleClick}
-//                 // Refs make it possible to access DOM nodes directly within React
-//                 // So you can manipulate a child of a component
-//                 ref={(n) => { boardRef = n; }}
-//             >
-//                 {cells.map(cell => (
-//                     <Cell
-//                         x={cell.x}
-//                         y={cell.y}
-//                         cellSize={cellSize}
-//                     />
-//                 ))}
-//             </div>
-//         </div>
-//     );
-// };
 
 // The Cell component
 class Cell extends React.Component {
@@ -133,14 +30,15 @@ class Cell extends React.Component {
     }
 }
 
+
 // The Game component
 class Game extends React.Component {
     // Set up the row/column sizes and
     // Create a new empty board
     constructor() {
         super();
-        this.rows = height / cellSize;
-        this.cols = width / cellSize;
+        this.rows = this.state.height / cellSize;
+        this.cols = this.state.width / cellSize;
         this.board = this.makeEmptyBoard();
     }
 
@@ -149,7 +47,13 @@ class Game extends React.Component {
         cells: [],
         interval: 100,
         isRunning: false,
+        count: 0,
+        // Width and height of game board
+        width: 800,
+        height: 600,
     }
+
+    // ---------- Helper functions ----------
 
     // The cell murderer
     makeEmptyBoard() {
@@ -227,6 +131,8 @@ class Game extends React.Component {
         this.setState({ cells: this.makeCells() });
     }
 
+    // ---------- Game functionality ----------
+
     // Start the game!
     runGame = () => {
         this.setState({ isRunning: true });
@@ -245,7 +151,6 @@ class Game extends React.Component {
             this.timeoutHandler = null;
         }
     }
-
 
     // Action!
     runIteration() {
@@ -281,6 +186,8 @@ class Game extends React.Component {
 
         // Set the old board to the newly-changed board
         this.board = newBoard;
+        // Increase the iteration count
+        this.state.count++;
         // Set the changed cells to state
         this.setState({ cells: this.makeCells() });
 
@@ -289,11 +196,6 @@ class Game extends React.Component {
             this.runIteration();
             // At this interval
         }, this.state.interval);
-    }
-
-    handleIntervalChange = (event) => {
-        // Set the interval to the new value input by user
-        this.setState({ interval: event.target.value });
     }
 
     // Calculate the current cell's neighbor's positions
@@ -319,6 +221,43 @@ class Game extends React.Component {
 
         return neighbors;
     }
+    
+    // ---------- Control helpers ----------
+
+    handleIntervalChange = (event) => {
+        // Set the interval to the new value input by user
+        this.setState({ interval: event.target.value });
+    }
+    
+    handleClear = () => {
+        this.board = this.makeEmptyBoard();
+        this.setState({ cells: this.makeCells() });
+        this.setState({ count: 0 })
+    }
+
+    handleRandom = () => {
+        for (let y = 0; y < this.rows; y++) {
+            for (let x = 0; x < this.cols; x++) {
+                this.board[y][x] = (Math.random() >= 0.5);
+            }
+        }
+
+        this.setState({ cells: this.makeCells() });
+    }
+
+    smallerGrid = () => {
+        this.setState({
+            width: this.state.width/2,
+            height: this.state.height/2
+        });
+    }
+
+    largerGrid = () => {
+        this.setState({
+            width: this.state.width*2,
+            height: this.state.height*2
+        });
+    }
 
 
     render() {
@@ -327,38 +266,56 @@ class Game extends React.Component {
 
         return (
             <div>
-                {/* The game board */}
-                <div
-                    className="board"
-                    style={{
-                        width: width,
-                        height: height,
-                        // Sets the cell size
-                        backgroundSize: `${cellSize}px ${cellSize}px`
-                    }}
-                    onClick={this.handleClick}
-                    // Refs make it possible to access DOM nodes directly within React
-                    // So you can manipulate a child of a component
-                    ref={(n) => { this.boardRef = n; }}>
+                <div className="wrapper">
+                    {/* The game board */}
+                    <div
+                        className="board"
+                        style={{
+                            width: this.state.width,
+                            height: this.state.height,
+                            // Sets the cell size
+                            backgroundSize: `${cellSize}px ${cellSize}px`
+                        }}
+                        onClick={this.handleClick}
+                        // Refs make it possible to access DOM nodes directly within React
+                        // So you can manipulate a child of a component
+                        ref={(n) => { this.boardRef = n; }}>
 
-                    {/* Map through current state's cells and create a cell for each */}
-                    {cells.map(cell => (
-                        <Cell x={cell.x} y={cell.y}
-                        key={`${cell.x},${cell.y}`}/>
-                        ))}
+                        {/* Map through current state's cells and create a cell for each */}
+                        {cells.map(cell => (
+                            <Cell x={cell.x} y={cell.y}
+                            key={`${cell.x},${cell.y}`}/>
+                            ))}
+                    </div>
+                            
+                    {/* Instructions and rules */}
+                    <div className="rules">
+                        <Rules />
+                    </div>
                 </div>
 
                 <div className="controls">
+                    <h4>This is generation {this.state.count}</h4>
                     {/* User input for interval */}
-                    Update every <input value={this.state.interval} onChange={this.handleIntervalChange} /> msec
+                    <h4>Update every <input value={this.state.interval} onChange={this.handleIntervalChange} /> msec</h4>
                     
-                    {/* Check if the game is running */}
+                    {/* Stop/run button toggle */}
                     {this.state.isRunning ?
                         // If so, display 'Stop' button
                         <button className="button" onClick={this.stopGame}>Stop</button> :
                         // If not, display 'Run' button
                         <button className="button" onClick={this.runGame}>Run</button>
                     }
+
+                    {/* Random button */}
+                    <button className="button" onClick={this.handleRandom}>Random</button>
+
+                    {/* Clear button */}
+                    <button className="button" onClick={this.handleClear}>Clear</button>
+
+                    {/* Size buttons */}
+                    <button className="button" onClick={this.smallerGrid}>Smaller</button>
+                    <button className="button" onClick={this.largerGrid}>Larger</button>
                 </div>
             </div>
         );
