@@ -1,5 +1,5 @@
 // React
-import React, { useState, useRef } from 'react';
+import React from 'react';
 // Component
 import Rules from './Rules';
 // Styling
@@ -295,9 +295,9 @@ class Game extends React.Component {
                 </div>
 
                 <div className="controls">
-                    This is generation {this.state.count}<br /><br />
+                    <h4>This is generation {this.state.count}</h4>
                     {/* User input for interval */}
-                    Update every <input value={this.state.interval} onChange={this.handleIntervalChange} /> msec
+                    <h4>Update every <input value={this.state.interval} onChange={this.handleIntervalChange} /> msec</h4>
                     
                     {/* Stop/run button toggle */}
                     {this.state.isRunning ?

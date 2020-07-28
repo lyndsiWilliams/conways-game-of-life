@@ -1,6 +1,15 @@
+h1 {
+    width: fit-content;
+    padding: 1%;
+    margin: 0 auto;
+    border: 5px solid #333333;
+    background-color: rgba(237, 255, 71, .5);
+    box-shadow: black 10px 10px 5px;
+    border-radius: 5px;
+}
 .board {
     position: relative;
-    margin: 2% auto;
+    margin: 1% auto;
     background-color: #000000;
     /* This creates the grid lines */
     background-image:
@@ -10,10 +19,10 @@
         linear-gradient(90deg, #333333 1px, transparent 1px);
     border: 5px solid #333333;
     box-shadow: black 10px 10px 5px;
+    border-radius: 5px;
 }
 
 .cell {
-    /* background: #cccccc; */
     background-image: linear-gradient(to bottom right, darkred, red, darkred);
     position: absolute;
 }
@@ -27,6 +36,8 @@
     margin-right: 10%;
     border: 5px solid #333333;
     box-shadow: black 10px 10px 5px;
+    background-color: rgba(237, 255, 71, .5);
+    border-radius: 5px;
 }
 
 .wrapper {
@@ -36,7 +47,13 @@
 }
 
 .controls {
-    margin-top: 20px;
+    width: fit-content;
+    padding: 1%;
+    margin: auto;
+    border: 5px solid #333333;
+    background-color: rgba(237, 255, 71, .5);
+    box-shadow: black 10px 10px 5px;
+    border-radius: 5px;
 }
 
 .button {

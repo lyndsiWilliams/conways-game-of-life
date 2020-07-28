@@ -1,8 +1,9 @@
+body {
+    background-image: linear-gradient(to right, orange, orangered);
+}
+
 .App {
   text-align: center;
-  /* display: flex;
-  flex-direction: column;
-  align-items: center; */
 }
 
 .App-logo {
