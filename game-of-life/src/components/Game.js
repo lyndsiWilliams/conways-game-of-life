@@ -55,7 +55,7 @@ class Game extends React.Component {
 
     // ---------- Helper functions ----------
 
-    // The cell murderer
+    // The board creator
     makeEmptyBoard() {
         let board = [];
         
@@ -66,7 +66,7 @@ class Game extends React.Component {
             
             // Inner loop goes through the columns
             for (let x = 0; x < this.cols; x++) {
-                // This kills the cell
+                // This makes all the cells start off as "dead"
                 board[y][x] = false;
             }
         }
