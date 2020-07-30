@@ -7,6 +7,12 @@ h1 {
     box-shadow: black 10px 10px 5px;
     border-radius: 5px;
 }
+
+span {
+    color: darkred;
+    font-weight: 700;
+}
+
 .board {
     position: relative;
     margin: 1% auto;

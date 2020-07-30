@@ -6,15 +6,12 @@ import Rules from './Rules';
 import './Game.css';
 
 
-// Size of one cell ((cellSize)px * (cellSize)px)
-const cellSize = 20;
-
-
 // The Cell component
 class Cell extends React.Component {
     render() {
         // Bring in x and y position as props
-        const { x, y } = this.props;
+        const { x, y, cellSize } = this.props;
+        // console.log(this.props)
         
         return (
             <div 
@@ -37,8 +34,8 @@ class Game extends React.Component {
     // Create a new empty board
     constructor() {
         super();
-        this.rows = this.state.height / cellSize;
-        this.cols = this.state.width / cellSize;
+        this.rows = this.state.height / this.state.cellSize;
+        this.cols = this.state.width / this.state.cellSize;
         this.board = this.makeEmptyBoard();
     }
 
@@ -51,6 +48,8 @@ class Game extends React.Component {
         // Width and height of game board
         width: 800,
         height: 600,
+        // Size of one cell ((cellSize)px * (cellSize)px)
+        cellSize: 20
     }
 
     // ---------- Helper functions ----------
@@ -117,8 +116,8 @@ class Game extends React.Component {
         // y value of place clicked - board's y value
         const offsetY = event.clientY - elemOffset.y;
         // Round down to remove the decimals from x and y 
-        const x = Math.floor(offsetX / cellSize);
-        const y = Math.floor(offsetY / cellSize);
+        const x = Math.floor(offsetX / this.state.cellSize);
+        const y = Math.floor(offsetY / this.state.cellSize);
 
         // If there isn't a cell at that position, place it
         // If there is already a cell at that position, remove it
@@ -221,6 +220,14 @@ class Game extends React.Component {
 
         return neighbors;
     }
+
+    updateBoard = () => {
+        console.log("UPDATING");
+        this.rows = this.state.height;
+        this.cols = this.state.width;
+        this.board = this.makeEmptyBoard();
+        this.setState({ cells: this.makeCells() });
+    }
     
     // ---------- Control helpers ----------
 
@@ -236,27 +243,43 @@ class Game extends React.Component {
     }
 
     handleRandom = () => {
+        this.rows = this.state.height / this.state.cellSize;
+        this.cols = this.state.width / this.state.cellSize;
+        console.log("RANDOM");
+        let outerCount = 0;
+        let innerCount = 0;
+        // Outer loop goes through the rows
         for (let y = 0; y < this.rows; y++) {
+            outerCount++
+            console.log("OUTER RANDOM", outerCount);
+            // Inner loop goes through the columns
             for (let x = 0; x < this.cols; x++) {
-                this.board[y][x] = (Math.random() >= 0.5);
+                innerCount++
+                console.log("INNER RANDOM", innerCount);
+                this.board[y][x] = Math.random() >= 0.5;
             }
         }
 
         this.setState({ cells: this.makeCells() });
+        // debugger
     }
 
     smallerGrid = () => {
+        console.log("SMALLER");
         this.setState({
-            width: this.state.width/2,
-            height: this.state.height/2
+            cellSize: this.state.cellSize/2
         });
+        this.updateBoard();
+        // debugger
     }
 
     largerGrid = () => {
+        console.log("LARGER");
         this.setState({
-            width: this.state.width*2,
-            height: this.state.height*2
+            cellSize: this.state.cellSize*2
         });
+        this.updateBoard();
+        // debugger
     }
 
 
@@ -274,7 +297,7 @@ class Game extends React.Component {
                             width: this.state.width,
                             height: this.state.height,
                             // Sets the cell size
-                            backgroundSize: `${cellSize}px ${cellSize}px`
+                            backgroundSize: `${this.state.cellSize}px ${this.state.cellSize}px`
                         }}
                         onClick={this.handleClick}
                         // Refs make it possible to access DOM nodes directly within React
@@ -283,8 +306,12 @@ class Game extends React.Component {
 
                         {/* Map through current state's cells and create a cell for each */}
                         {cells.map(cell => (
-                            <Cell x={cell.x} y={cell.y}
-                            key={`${cell.x},${cell.y}`}/>
+                            <Cell
+                                x={cell.x}
+                                y={cell.y}
+                                cellSize={this.state.cellSize}
+                                key={`${cell.x},${cell.y}`}
+                            />
                             ))}
                     </div>
                             
