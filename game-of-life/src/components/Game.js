@@ -6,16 +6,12 @@ import Rules from './Rules';
 import './Game.css';
 
 
-// Size of one cell ((cellSize)px * (cellSize)px)
-// const cellSize = 20;
-
-
 // The Cell component
 class Cell extends React.Component {
     render() {
         // Bring in x and y position as props
         const { x, y, cellSize } = this.props;
-        console.log(this.props)
+        // console.log(this.props)
         
         return (
             <div 
@@ -52,6 +48,7 @@ class Game extends React.Component {
         // Width and height of game board
         width: 800,
         height: 600,
+        // Size of one cell ((cellSize)px * (cellSize)px)
         cellSize: 20
     }
 
@@ -223,6 +220,14 @@ class Game extends React.Component {
 
         return neighbors;
     }
+
+    updateBoard = () => {
+        console.log("UPDATING");
+        this.rows = this.state.height;
+        this.cols = this.state.width;
+        this.board = this.makeEmptyBoard();
+        this.setState({ cells: this.makeCells() });
+    }
     
     // ---------- Control helpers ----------
 
@@ -238,25 +243,43 @@ class Game extends React.Component {
     }
 
     handleRandom = () => {
+        this.rows = this.state.height / this.state.cellSize;
+        this.cols = this.state.width / this.state.cellSize;
+        console.log("RANDOM");
+        let outerCount = 0;
+        let innerCount = 0;
+        // Outer loop goes through the rows
         for (let y = 0; y < this.rows; y++) {
+            outerCount++
+            console.log("OUTER RANDOM", outerCount);
+            // Inner loop goes through the columns
             for (let x = 0; x < this.cols; x++) {
-                this.board[y][x] = (Math.random() >= 0.5);
+                innerCount++
+                console.log("INNER RANDOM", innerCount);
+                this.board[y][x] = Math.random() >= 0.5;
             }
         }
 
         this.setState({ cells: this.makeCells() });
+        // debugger
     }
 
     smallerGrid = () => {
+        console.log("SMALLER");
         this.setState({
             cellSize: this.state.cellSize/2
         });
+        this.updateBoard();
+        // debugger
     }
 
     largerGrid = () => {
+        console.log("LARGER");
         this.setState({
             cellSize: this.state.cellSize*2
         });
+        this.updateBoard();
+        // debugger
     }
 
 
