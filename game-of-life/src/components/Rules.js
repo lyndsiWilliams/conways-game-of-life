@@ -6,15 +6,16 @@ const Rules = () => {
     return (
         <div>
             <h2>How to play:</h2>
-                <li>Click some squares (or the Random button) to populate the screen.</li>
-                <li>Set the speed of the game (in milliseconds)</li> 
-                <li>Click the Run button to start the game!</li>
-                <li>Click the Stop button to stop the simulation.</li>
-                <li>Click the Clear button to reset the board.</li>
+                <li>Click some squares (or the <span>Random button</span>) to populate the screen.</li>
+                <li>Set the <span>speed</span> of the game (in milliseconds)</li>
+                <li>Click the <span>Smaller/Larger buttons</span> to set the cell size.</li>
+                <li>Click the <span>Run button</span> to start the game!</li>
+                <li>Click the <span>Stop button</span> to stop the simulation.</li>
+                <li>Click the <span>Clear button</span> to reset the board.</li>
 
             <h2>Rules:</h2>
-                <li>If the cell is alive and has 2 or 3 neighbors, it remains alive. Otherwise it dies.</li>
-                <li>If the cell is dead and has exactly 3 neighbors, then it comes to life.</li>
+                <li>If the cell is <span>alive</span> and has 2 or 3 neighbors, it remains <span>alive</span>. Otherwise it <span>dies</span>.</li>
+                <li>If the cell is <span>dead</span> and has exactly 3 neighbors, then it comes to <span>life</span>.</li>
 
         </div>
     )
