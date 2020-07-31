@@ -261,25 +261,22 @@ class Game extends React.Component {
         }
 
         this.setState({ cells: this.makeCells() });
-        // debugger
     }
 
-    smallerGrid = () => {
+    smallerCells = () => {
         console.log("SMALLER");
         this.setState({
             cellSize: this.state.cellSize/2
         });
         this.updateBoard();
-        // debugger
     }
 
-    largerGrid = () => {
+    largerCells = () => {
         console.log("LARGER");
         this.setState({
             cellSize: this.state.cellSize*2
         });
         this.updateBoard();
-        // debugger
     }
 
 
@@ -341,8 +338,8 @@ class Game extends React.Component {
                     <button className="button" onClick={this.handleClear}>Clear</button>
 
                     {/* Size buttons */}
-                    <button className="button" onClick={this.smallerGrid}>Smaller</button>
-                    <button className="button" onClick={this.largerGrid}>Larger</button>
+                    <button className="button" onClick={this.smallerCells}>Smaller</button>
+                    <button className="button" onClick={this.largerCells}>Larger</button>
                 </div>
             </div>
         );
