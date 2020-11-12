@@ -275,6 +275,7 @@ class Game extends React.Component {
     return (
       <div>
         <div className="wrapper">
+          
           {/* Instructions and rules */}
           <div className="rules">
             <Rules />
@@ -303,32 +304,32 @@ class Game extends React.Component {
             <button className="button" onClick={this.smallerCells}>Smaller</button>
             <button className="button" onClick={this.largerCells}>Larger</button>
           </div>
-        
-          </div>{/* The game board */}
-        <div className="board-sizer">
-          <div
-            className="board"
-            style={{
-              width: this.state.width,
-              height: this.state.height,
-              // Sets the cell size
-              backgroundSize: `${this.state.cellSize}px ${this.state.cellSize}px`
-            }}
-            onClick={this.handleClick}
-            // Refs make it possible to access DOM nodes directly within React
-            // So you can manipulate a child of a component
-            ref={(n) => { this.boardRef = n; }}>
 
-            {/* Map through current state's cells and create a cell for each */}
-            {cells.map(cell => (
-              <Cell
-                x={cell.x}
-                y={cell.y}
-                cellSize={this.state.cellSize}
-                key={`${cell.x},${cell.y}`}
-              />
-            ))}
-          </div>
+        </div>
+
+        {/* The game board */}
+        <div
+          className="board"
+          style={{
+            width: this.state.width,
+            height: this.state.height,
+            // Sets the cell size
+            backgroundSize: `${this.state.cellSize}px ${this.state.cellSize}px`
+          }}
+          onClick={this.handleClick}
+          // Refs make it possible to access DOM nodes directly within React
+          // So you can manipulate a child of a component
+          ref={(n) => { this.boardRef = n; }}>
+
+          {/* Map through current state's cells and create a cell for each */}
+          {cells.map(cell => (
+            <Cell
+              x={cell.x}
+              y={cell.y}
+              cellSize={this.state.cellSize}
+              key={`${cell.x},${cell.y}`}
+            />
+          ))}
         </div>
       </div>
     );
