@@ -9,8 +9,8 @@ import Game from './components/Game';
 const App = () => {
   return (
     <div className="App">
-        <h1>Conway's Game of Life</h1>
-        <Game />
+      <h1>Conway's Game of Life</h1>
+      <Game />
     </div>
   );
 }
